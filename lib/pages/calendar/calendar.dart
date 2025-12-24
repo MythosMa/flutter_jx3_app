@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jx3_app/api/calendar/calendar.dart';
+import 'package:jx3_app/components/customCard/card.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -42,17 +43,29 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 if (todayCalendar.isNotEmpty) ...[
-                  Text(
-                    "今日大战：${todayCalendar['json_data']['war']}",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  )
+                  CustomInfoCard(
+                    content: Text(
+                      "大战：${todayCalendar['json_data']['war']}",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  CustomInfoCard(
+                    content: Text(
+                      "宠物福缘：${todayCalendar['json_data']['luck'].join(',')}",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
                 ]
               ],
             ),
