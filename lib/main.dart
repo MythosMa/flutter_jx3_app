@@ -1,8 +1,6 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:jx3_app/pages/calendar/calendar.dart';
 import 'package:jx3_app/pages/home/home.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());

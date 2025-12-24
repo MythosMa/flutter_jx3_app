@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jx3_app/api/home.dart';
+import 'package:jx3_app/api/server_list/server_list.dart';
 import 'package:jx3_app/components/customCard/card.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,6 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> _serverList = [];
+  int _currentServerIndex = 0;
 
   @override
   void initState() {
@@ -33,10 +34,18 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.all(12),
           children: [
             if (_serverList.isNotEmpty) ...[
-              ServerCard(serverList: _serverList),
+              ServerCard(
+                  serverList: _serverList,
+                  currentServerIndex: _currentServerIndex,
+                  onServerSelected: (index) {
+                    _currentServerIndex = index;
+                    setState(() {});
+                  }),
               SizedBox(height: 20),
+              MenuCard(
+                currentServer: _serverList[_currentServerIndex],
+              ),
             ],
-            MenuCard()
           ],
         ));
   }
@@ -44,20 +53,26 @@ class _HomePageState extends State<HomePage> {
 
 class ServerCard extends StatefulWidget {
   final dynamic serverList;
+  final int currentServerIndex;
+  final Function(int index) onServerSelected;
 
-  const ServerCard({super.key, required this.serverList});
+  const ServerCard({
+    super.key,
+    required this.serverList,
+    required this.currentServerIndex,
+    required this.onServerSelected,
+  });
 
   @override
   State<ServerCard> createState() => _ServerCardState();
 }
 
 class _ServerCardState extends State<ServerCard> {
-  var _currentServerIndex = 0;
   @override
   Widget build(BuildContext context) {
     return CustomInfoCard(
       title: Text(
-        "当前服务器：${widget.serverList[_currentServerIndex]['server_name']}",
+        "当前服务器：${widget.serverList[widget.currentServerIndex]['server_name']}",
         style: TextStyle(
           color: Colors.black,
           fontSize: 16,
@@ -78,9 +93,7 @@ class _ServerCardState extends State<ServerCard> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _currentServerIndex = index;
-                    });
+                    widget.onServerSelected(index);
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -109,7 +122,8 @@ class _ServerCardState extends State<ServerCard> {
 }
 
 class MenuCard extends StatefulWidget {
-  const MenuCard({super.key});
+  final Map<String, dynamic> currentServer;
+  const MenuCard({super.key, required this.currentServer});
 
   @override
   State<MenuCard> createState() => _MenuCardState();
@@ -135,6 +149,7 @@ class _MenuCardState extends State<MenuCard> {
               Navigator.pushNamed(
                 context,
                 _menus[index]['route'],
+                arguments: {"server": widget.currentServer},
               );
             },
             child: Container(
