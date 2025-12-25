@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:jx3_app/constants/index.dart';
 
 class DioUtils {
   DioUtils._internal() {
     _dio
       ..options.baseUrl = "https://www.mythosma.com/rust-jx3-server/"
-      ..options.connectTimeout = const Duration(seconds: 10)
-      ..options.receiveTimeout = const Duration(seconds: 10);
+      ..options.connectTimeout =
+          const Duration(seconds: GlobalConstants.DEFAULT_TIMEOUT)
+      ..options.receiveTimeout =
+          const Duration(seconds: GlobalConstants.DEFAULT_TIMEOUT);
     // ⚠️ Web 上移除 sendTimeout（见下文说明）
 
     _addInterceptor();
@@ -42,23 +45,32 @@ class DioUtils {
   Future<dynamic> get(
     String path, {
     Map<String, dynamic>? queryParameters,
-  }) async {
-    final response = await _dio.get(path, queryParameters: queryParameters);
-    final data = response.data as Map<String, dynamic>;
-    return data['data'];
+  }) {
+    return _handleResponse(_dio.get(path, queryParameters: queryParameters));
   }
 
   Future<dynamic> post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-  }) async {
-    final response = await _dio.post(
+  }) {
+    return _handleResponse(_dio.post(
       path,
       data: data,
       queryParameters: queryParameters,
-    );
-    final result = response.data as Map<String, dynamic>;
-    return result['data'];
+    ));
+  }
+
+  Future<dynamic> _handleResponse(Future<Response<dynamic>> task) async {
+    try {
+      Response<dynamic> result = await task;
+      final data = result.data as Map<String, dynamic>;
+      if (data['code'] == GlobalConstants.SUCCESS_CODE) {
+        return data['data'];
+      }
+      throw Exception(data['message'] ?? '接口发生错误');
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
