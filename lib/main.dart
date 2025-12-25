@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jx3_app/pages/calendar/calendar.dart';
-import 'package:jx3_app/pages/home/home.dart';
+import 'package:jx3_app/routes/index.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,11 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "剑网三小助手 ",
-      routes: {
-        "/home": (context) => HomePage(),
-        "/calendar": (context) => CalendarPage()
-      },
-      initialRoute: "/home",
+      routes: getRoutes(),
       theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.light,
