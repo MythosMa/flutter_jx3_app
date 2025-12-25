@@ -48,6 +48,16 @@ class _CalendarPageState extends State<CalendarPage> {
             child: Column(
               children: [
                 if (todayCalendar != null) ...[
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                        "今天是${todayCalendar!.date},星期${todayCalendar!.week}",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                  ),
+                  SizedBox(height: 12),
                   CustomInfoCard(
                     content: Text(
                       "大战：${todayCalendar!.war}",
@@ -61,6 +71,16 @@ class _CalendarPageState extends State<CalendarPage> {
                   CustomInfoCard(
                     content: Text(
                       "宠物福缘：${todayCalendar!.luck.join(',')}",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  CustomInfoCard(
+                    content: Text(
+                      "战场：${todayCalendar!.battle}",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
