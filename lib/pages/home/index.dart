@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jx3_app/api/server_list/model.dart';
 import 'package:jx3_app/api/server_list/server_list.dart';
 import 'package:jx3_app/components/customCard/card.dart';
 
@@ -10,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> _serverList = [];
+  List<ServerItem> _serverList = [];
   int _currentServerIndex = 0;
 
   @override
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ServerCard extends StatefulWidget {
-  final dynamic serverList;
+  final List<ServerItem> serverList;
   final int currentServerIndex;
   final Function(int index) onServerSelected;
 
@@ -72,7 +73,7 @@ class _ServerCardState extends State<ServerCard> {
   Widget build(BuildContext context) {
     return CustomInfoCard(
       title: Text(
-        "当前服务器：${widget.serverList[widget.currentServerIndex]['server_name']}",
+        "当前服务器：${widget.serverList[widget.currentServerIndex].serverName}",
         style: TextStyle(
           color: Colors.black,
           fontSize: 16,
@@ -103,7 +104,7 @@ class _ServerCardState extends State<ServerCard> {
                       color: const Color.fromARGB(255, 92, 186, 248),
                     ),
                     child: Text(
-                      widget.serverList[index]['server_name'],
+                      widget.serverList[index].serverName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -122,7 +123,7 @@ class _ServerCardState extends State<ServerCard> {
 }
 
 class MenuCard extends StatefulWidget {
-  final Map<String, dynamic> currentServer;
+  final ServerItem currentServer;
   const MenuCard({super.key, required this.currentServer});
 
   @override

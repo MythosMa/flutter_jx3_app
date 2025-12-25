@@ -23,7 +23,6 @@ class DioUtils {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          // 可在此添加 token、日志等
           handler.next(options);
         },
         onResponse: (response, handler) {

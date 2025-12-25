@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jx3_app/api/calendar/calendar.dart';
+import 'package:jx3_app/api/calendar/model.dart';
+import 'package:jx3_app/api/server_list/model.dart';
 import 'package:jx3_app/components/customCard/card.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -10,8 +12,8 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  Map<String, dynamic> currentServer = {};
-  Map<String, dynamic> todayCalendar = {};
+  ServerItem? currentServer;
+  CalendarItem? todayCalendar;
 
   @override
   void initState() {
@@ -21,12 +23,11 @@ class _CalendarPageState extends State<CalendarPage> {
       if (!mounted) return;
       final route = ModalRoute.of(context);
       if (route?.settings.arguments != null) {
-        print(route?.settings.arguments);
         Map<String, dynamic> arguments =
             route!.settings.arguments as Map<String, dynamic>;
         if (arguments['server'] != null) {
           currentServer = arguments['server'];
-          getTodayCalendarApi(currentServer['server_name']).then((value) {
+          getTodayCalendarApi(currentServer!.serverName).then((value) {
             todayCalendar = value;
             setState(() {});
           });
@@ -46,10 +47,10 @@ class _CalendarPageState extends State<CalendarPage> {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                if (todayCalendar.isNotEmpty) ...[
+                if (todayCalendar != null) ...[
                   CustomInfoCard(
                     content: Text(
-                      "大战：${todayCalendar['json_data']['war']}",
+                      "大战：${todayCalendar!.war}",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -59,7 +60,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   SizedBox(height: 12),
                   CustomInfoCard(
                     content: Text(
-                      "宠物福缘：${todayCalendar['json_data']['luck'].join(',')}",
+                      "宠物福缘：${todayCalendar!.luck.join(',')}",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
